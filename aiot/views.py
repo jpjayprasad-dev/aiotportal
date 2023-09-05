@@ -8,22 +8,18 @@ from .models import Hotel, Room, Floor, Device, DeviceParameter, Data, Control
 class HotelItemViews(APIView):
     def get(self, request):
         hotels = Hotel.objects.all()
-        print(hotels)
         serializer = HotelSerializer(hotels, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class FloorItemViews(APIView):
     def get(self, request, hotel_id):
-        print(hotel_id)
         rooms = Floor.objects.filter(hotel_id=hotel_id)
-        print(rooms)
         serializer = FloorSerializer(rooms, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class RoomItemViews(APIView):
     def get(self, request, floor_id):
         rooms = Room.objects.filter(floor_id=floor_id)
-        print(rooms)
         serializer = RoomSerializer(rooms, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
