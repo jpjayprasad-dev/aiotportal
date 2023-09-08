@@ -29,9 +29,10 @@ class DeviceParameterSerializer(serializers.HyperlinkedModelSerializer):
 
 class RoomDataSerializer(serializers.HyperlinkedModelSerializer):
      device_parameter_id = DeviceParameterSerializer()
+     room_id = RoomSerializer()
      class Meta:
         model = Data
-        fields = ( 'device_parameter_id', 'value', 'timestamp')
+        fields = ( 'device_parameter_id', 'value', 'timestamp', 'room_id')
 
 class RoomDataCreateSerializer(serializers.ModelSerializer):
      class Meta:
@@ -40,9 +41,10 @@ class RoomDataCreateSerializer(serializers.ModelSerializer):
 
 class RoomControlSerializer(serializers.HyperlinkedModelSerializer):
      device_parameter_id = DeviceParameterSerializer()
+     room_id = RoomSerializer()
      class Meta:
         model = Control
-        fields = ( 'device_parameter_id', 'value', 'timestamp')
+        fields = ( 'device_parameter_id', 'value', 'timestamp', 'room_id')
 
 class RoomControlCreateSerializer(serializers.ModelSerializer):
      class Meta:

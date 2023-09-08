@@ -1,8 +1,11 @@
+from datetime import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import HotelSerializer, FloorSerializer, RoomSerializer, RoomDataSerializer, RoomDataCreateSerializer, RoomControlSerializer, RoomControlCreateSerializer
 from .models import Hotel, Room, Floor, Device, DeviceParameter, Data, Control
+from psycopg2.extras import DateTimeTZRange
+from django.utils import timezone as tz
 
 
 class HotelItemViews(APIView):
@@ -23,25 +26,45 @@ class RoomItemViews(APIView):
         serializer = RoomSerializer(rooms, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
-class RoomDataItemViews(APIView):
-    def get(self, request, room_id):
+class RoomEntityItemViews(APIView):
+    def get(self, request, room_id, type):
         if type == 'data':
-            data = Data.objects.filter(room_id=room_id)
+            data = Data.objects.filter(room_id=room_id) if room_id != "all" else Data.objects
+            print(request.data)
+            if request.data.get('timespan'):
+                lower_scope = tz.now() - tz.timedelta(seconds=int(request.data.get('timespan')))
+                higher_scope = tz.now()
+                data = data.filter(timestamp__gte=lower_scope, timestamp__lte=higher_scope)
             serializer = RoomDataSerializer(data, many=True)
         elif type == 'control':
-            control = Control.objects.filter(room_id=room_id)
+            control = Control.objects.filter(room_id=room_id) if room_id != "all" else Control.objects
+            if request.data.get('timespan'):
+                lower_scope = tz.now() - tz.timedelta(seconds=int(request.data.get('timespan')))
+                higher_scope = tz.now()
+                control = control.filter(timestamp__gte=lower_scope, timestamp__lte=higher_scope)
             serializer = RoomDataSerializer(control, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
  
 
-class RoomDeviceDataItemViews(APIView):
-    def get(self, request, room_id, type, device_name):
+class RoomDeviceEntityItemViews(APIView):
+    def get(self, request, room_id, type, device_name):       
         device_id = Device.objects.filter(name=device_name).values_list('id', flat=True)[0]
         if type == 'data':
-            data = Data.objects.select_related('device_parameter_id').filter(room_id=room_id, device_parameter_id__device_id=device_id)
+            data = Data.objects.filter(room_id=room_id) if room_id != "all" else Data.objects
+            data = data.select_related('device_parameter_id').filter(device_parameter_id__device_id=device_id)
+            print(request.data)
+            if request.data.get('timespan'):
+                lower_scope = tz.now() - tz.timedelta(seconds=int(request.data.get('timespan')))
+                higher_scope = tz.now()
+                data = data.filter(timestamp__gte=lower_scope, timestamp__lte=higher_scope)
             serializer = RoomDataSerializer(data, many=True)
         elif type == 'control':
-            control = Control.objects.select_related('device_parameter_id').filter(room_id=room_id, device_parameter_id__device_id=device_id)
+            control = Control.objects.filter(room_id=room_id) if room_id != "all" else Control.objects
+            control = control.select_related('device_parameter_id').filter(device_parameter_id__device_id=device_id)
+            if request.data.get('timespan'):
+                lower_scope = tz.now() - tz.timedelta(seconds=int(request.data.get('timespan')))
+                higher_scope = tz.now()
+                control = control.filter(timestamp__gte=lower_scope, timestamp__lte=higher_scope)
             serializer = RoomControlSerializer(control, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
