@@ -14,6 +14,12 @@ class HotelItemViews(APIView):
         serializer = HotelSerializer(hotels, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
+class HotelViews(APIView):
+    def get(self, request, name):
+        hotels = Hotel.objects.filter(name=name)
+        serializer =  HotelSerializer(hotels, many=True)
+        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+
 class FloorItemViews(APIView):
     def get(self, request, hotel_id):
         rooms = Floor.objects.filter(hotel_id=hotel_id)
