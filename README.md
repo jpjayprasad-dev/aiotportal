@@ -34,13 +34,15 @@ docker run --rm -d -p 8800:8800 -e POSTGRES_HOST=<postgres_host> -e POSTGRES_POR
 ## USAGES
 1. Go to the browser http://<host_ip>:8800/admin to access the DB administration via DJango app.
 2. The service provides the below APIs to fetch IoT sensor data and post IoT controls.
- a. [url](http://<host_ip>:8800)/hotels/: Retrieve all hotels.
- b. [url](http://<host_ip>:8800)/hotels/<hotel_id>/floors/: Access floors in a hotel.
- c. [url](http://<host_ip>:8800)/floors/<floor_id>/rooms/: List rooms on a floor.
- d. [url](http://<host_ip>:8800)/rooms/<room_id>/data/: Get IoT data for a room.
- e. [url](http://<host_ip>:8800)/rooms/<room_id>/data/life_being/: Life Being sensor data.
- f. [url](http://<host_ip>:8800)/rooms/<room_id>/data/iaq/: IAQ sensor data.
- g. [url](http://<host_ip>:8800)/rooms/<room_id>/control/aircon/: Device control data. POST with a payload structure '{"param":<control_paramenter>, "value":<control_value>}'
+   ```
+   a. [url](http://<host_ip>:8800)/hotels/: Retrieve all hotels.
+   b. [url](http://<host_ip>:8800)/hotels/<hotel_id>/floors/: Access floors in a hotel.
+   c. [url](http://<host_ip>:8800)/floors/<floor_id>/rooms/: List rooms on a floor.
+   d. [url](http://<host_ip>:8800)/rooms/<room_id>/data/: Get IoT data for a room.
+   e. [url](http://<host_ip>:8800)/rooms/<room_id>/data/life_being/: Life Being sensor data.
+   f. [url](http://<host_ip>:8800)/rooms/<room_id>/data/iaq/: IAQ sensor data.
+   g. [url](http://<host_ip>:8800)/rooms/<room_id>/control/aircon/: Device control data. POST with a payload structure '{"param":<control_paramenter>, "value":<control_value>}'
+   ```
 
 ## Examples [Screenshots]
 To get life_being sensor data from a room with id 3
