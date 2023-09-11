@@ -1,6 +1,6 @@
 # AIOT Portal
 
-This is a Django application helps managing Data and Control of Aiot Devies.
+This is a Django application helps managing data of iot sensors and control of devies.
 
 ### Steps:
  - Clone this git repo.
